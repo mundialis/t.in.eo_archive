@@ -152,7 +152,7 @@ eolab_collection_params = {
             "S2_CLM": "CLM_R1"
         },
         "CLM_dir": "MASKS",
-        "tile_system": "UTM"
+        "tile_system": "MGRS"
     }
 }
 
@@ -297,12 +297,10 @@ def check_start_end(start, end):
     except Exception as e:
         grass.fatal(_(f"Start/End date is not defined in format YYYY-MM-DD: {e}"))
     maja_date = date(2015, 7, 1)
-    if start_date < maja_date:
-        grass.fatal(_("Start is before 2015-07-01, "
-                      "please select a later start date"))
+    if end_date < maja_date:
+        grass.fatal(_("End is before 2015-07-01, please select a later "
+                      "end date, as no data is available otherwise"))
     # check if end ist after start
-    end_list = [int(x) for x in end.split('-')]
-    end_date = date(end_list[0], end_list[1], end_list[2])
     if end_date < start_date:
         grass.fatal(_("End date is before start date"))
 
@@ -394,7 +392,7 @@ def browse_eolab_collection(collection, bands, mountpoint, start_date, end_date)
     file_format = collection_dict["file_format"]
     clm_dir = collection_dict["CLM_dir"]
     tile_system = collection_dict["tile_system"]
-    if tile_system == "UTM":
+    if tile_system == "MGRS":
         tiles = get_utmcells()
     bands_filesuffixes = {}
     for key, value in collection_dict["bands_filesuffixes"].items():
@@ -406,7 +404,7 @@ def browse_eolab_collection(collection, bands, mountpoint, start_date, end_date)
         for month in os.listdir(os.path.join(basepath, year)):
             for day in os.listdir(os.path.join(basepath, year, month)):
                 folder_date = date(int(year), int(month), int(day))
-                if folder_date >= start_date and folder_date <= end_date:
+                if folder_date >= start_date and folder_date < end_date:
                     for scene in os.listdir(os.path.join(basepath,
                                             year, month, day)):
 
@@ -475,6 +473,9 @@ def import_raster(paramdict):
     name = paramdict["name"]
     input = paramdict["input"]
     memory = paramdict["memory"]
+    # if memory is >= 100000, otherwise GDAL interprets it as bytes, not MB.
+    if memory >= 100000:
+        memory = memory * 1000000
     semantic_label = paramdict["semantic_label"]
     scene_datetime = paramdict["datetime"]
     grass.message(_(f"Importing {name} ..."))
