@@ -119,7 +119,7 @@
 import grass.script as grass
 from multiprocessing import Pool
 import atexit
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import multiprocessing as mp
 import os
 import psutil
@@ -303,7 +303,9 @@ def check_start_end(start, end):
     # check if end ist after start
     if end_date < start_date:
         grass.fatal(_("End date is before start date"))
-
+    # if end_date and start_date are the same, increment end_date by 1 day
+    elif end_date == start_date:
+        end_date += timedelta(days=1)
     return start_date, end_date
 
 
@@ -473,9 +475,6 @@ def import_raster(paramdict):
     name = paramdict["name"]
     input = paramdict["input"]
     memory = paramdict["memory"]
-    # if memory is >= 100000, otherwise GDAL interprets it as bytes, not MB.
-    if memory >= 100000:
-        memory = memory * 1000000
     semantic_label = paramdict["semantic_label"]
     scene_datetime = paramdict["datetime"]
     grass.message(_(f"Importing {name} ..."))
@@ -555,6 +554,9 @@ def main():
     # Importing using the Pool method
     nprocs, used_ram = test_nprocs_memory()
     ram_per_proc = int(used_ram / nprocs)
+    # if memory is >= 10000 GDAL interprets it as bytes, not MB.
+    if ram_per_proc >= 10000:
+        ram_per_proc = ram_per_proc * 1000000
     grass.message(_("Importing bands..."))
     import_parallel_list = list()
     for scene_dict in scenes_to_import:
