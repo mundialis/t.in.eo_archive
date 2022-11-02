@@ -554,8 +554,8 @@ def main():
     # Importing using the Pool method
     nprocs, used_ram = test_nprocs_memory()
     ram_per_proc = int(used_ram / nprocs)
-    # if memory is >= 10000 GDAL interprets it as bytes, not MB.
-    if ram_per_proc >= 10000:
+    # if memory is >= 100000 GDAL interprets it as bytes, not MB.
+    if ram_per_proc >= 100000:
         ram_per_proc = ram_per_proc * 1000000
     grass.message(_("Importing bands..."))
     import_parallel_list = list()
