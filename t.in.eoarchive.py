@@ -288,6 +288,8 @@ def check_start_end(start, end):
     # set end if end is today
     if end == "today":
         end = date.today().strftime("%Y-%m-%d")
+    if start == "today":
+        start = date.today().strftime("%Y-%m-%d")
     # check start after 2015-07
     start_list = [int(x) for x in start.split('-')]
     end_list = [int(x) for x in end.split('-')]
@@ -532,6 +534,10 @@ def main():
     # parameters
     start = options['start']
     end = options['end']
+    if not start:
+        start = "2015-07-01"
+    if not end:
+        end = "today"
     mountpoint = options["mountpoint"]
     collection = options["collection"]
     bands = options["bands"].split(",")

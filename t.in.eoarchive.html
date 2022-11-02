@@ -5,8 +5,8 @@ import a spatial and temporal subset of a EO collection from a given archive
 into GRASS as STRDS. Currently only the EOLAB archive and only the Sentinel-2 MAJA collection is supported.
 <p>
 The spatial subset is defined by the current computational region, while the temporal
-subset is defined by the <b>start</b> and <b>end</b> parameters. The <b>end</b> date
-can be the text <em>today</em> which is translated to the current date.
+subset is defined by the <b>start</b> and <b>end</b> parameters. If the <b>start</b> parameter is omitted, the earliest date with available
+data is assumed as <b>start</b>. If the <b>end</b> parameter is omitted, today's date is assumed as <b>end</b>.
 <p>
 The path to the mounted data directory can be defined by the <b>mountpoint</b>
 parameter.
