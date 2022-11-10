@@ -562,7 +562,7 @@ def main():
     ram_per_proc = int(used_ram / nprocs)
     # if memory is >= 100000 GDAL interprets it as bytes, not MB.
     if ram_per_proc >= 100000:
-        ram_per_proc = ram_per_proc * 1000000
+        ram_per_proc = ram_per_proc * 1048576  # (1 MB = 1024 * 1024 Byte)
     grass.message(_("Importing bands..."))
     import_parallel_list = list()
     for scene_dict in scenes_to_import:
