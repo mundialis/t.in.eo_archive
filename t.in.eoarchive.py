@@ -50,7 +50,7 @@
 # % multiple: yes
 # % description: Bands to import
 # % options: S2_B2,S2_B3,S2_B4,S2_B5,S2_B6,S2_B7,S2_B8,S2_B8A,S2_B11,S2_B12,S2_CLM
-# % answer: S2_B4,S2_B8,S2_CLM
+# % answer: S2_B2,S2_B3,S2_B4,S2_B5,S2_B6,S2_B7,S2_B8,S2_B8A,S2_B11,S2_B12,S2_CLM
 # % guisection: Filter
 # %end
 
