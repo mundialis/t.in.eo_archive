@@ -544,8 +544,8 @@ def main():
         bands_tmp = options["bands"].split(",")
         for band in bands_tmp:
             if band not in allowed_bands:
-                grass.fatal(_(f"Band {band} not allowed in collection "
-                              f"{collection}! Allowed bands are: "
+                grass.fatal(_(f"Band {band} not available in collection "
+                              f"{collection}! Available bands are: "
                               f"{', '.join(allowed_bands)}"))
         bands = bands_tmp
     else:
