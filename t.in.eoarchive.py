@@ -47,10 +47,8 @@
 # % key: bands
 # % type: string
 # % required: no
-# % multiple: yes
+# % multiple: no
 # % description: Bands to import
-# % options: S2_B2,S2_B3,S2_B4,S2_B5,S2_B6,S2_B7,S2_B8,S2_B8A,S2_B11,S2_B12,S2_CLM
-# % answer: S2_B4,S2_B8,S2_CLM
 # % guisection: Filter
 # %end
 
@@ -540,7 +538,18 @@ def main():
         end = "today"
     mountpoint = options["mountpoint"]
     collection = options["collection"]
-    bands = options["bands"].split(",")
+    allowed_bands = list(
+        eolab_collection_params[collection]["bands_filesuffixes"].keys())
+    if options["bands"]:
+        bands_tmp = options["bands"].split(",")
+        for band in bands_tmp:
+            if band not in allowed_bands:
+                grass.fatal(_(f"Band {band} not available in collection "
+                              f"{collection}! Available bands are: "
+                              f"{', '.join(allowed_bands)}"))
+        bands = bands_tmp
+    else:
+        bands = allowed_bands
     output = options["output"]
     archive = options["archive"]
 
